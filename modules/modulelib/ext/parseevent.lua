@@ -191,6 +191,33 @@ local function afterLoadElement(el)
 
     if #el.nodes == 0 then
         setText(el, el:getcontent())
+    else
+        local width = el.widget:getWidth()
+        local height = el.widget:getHeight()
+
+        local maxWidth = 0
+        local maxHeight = 0
+        local lastIsBlock = false
+        if width == 0 or not height == 0 then
+            for _, node in pairs(el.nodes) do
+                if lastIsBlock then
+                    maxWidth = math.max(maxWidth, node.widget:getWidth())
+                    maxHeight = math.max(maxHeight, node.widget:getHeight())
+                else
+                    maxWidth = maxWidth + node.widget:getWidth()
+                    maxHeight = maxHeight + node.widget:getHeight()
+                end
+                lastIsBlock = el.styles and el.styles.display == 'block' or false
+            end
+        end
+
+        if width == 0 then
+            el.widget:setWidth(maxWidth)
+        end
+
+        if height == 0 then
+            el.widget:setHeight(maxHeight)
+        end
     end
 end
 

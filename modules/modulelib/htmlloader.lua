@@ -154,7 +154,8 @@ function HtmlLoader(path, parent, controller)
 
     local radioGroups = {}
     local all = root:find('*')
-    for _, el in pairs(all) do
+    for i = #all, 1, -1 do
+        local el = all[i]
         if el.widget then
             parseAndSetDisplayAttr(el)
             parseAndSetFloatStyle(el)
