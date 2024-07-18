@@ -1,4 +1,6 @@
 local function FixSelection(selector)
+    selector = selector:trim()
+
     local lastPos = nil
     while true do
         local pos = selector:find('%[', lastPos)
@@ -23,20 +25,20 @@ local function FixSelection(selector)
     return selector
 end
 
-local function parseStyleElement(content, cssList, checkExist)
+local function parseCss(content, cssList, checkExist)
     local css = CssParse.new()
     css:parse(content)
     local data = css:get_objects()
     for _, o in ipairs(data) do
         table.insert(cssList, {
-            selector = FixSelection(o.selector:trim()),
+            selector = FixSelection(o.selector),
             attrs = o.declarations,
             checkExist = checkExist
         })
     end
 end
 
-local function processDisplayStyle(el)
+local function parseAndSetDisplayAttr(el)
     if el.widget:hasAnchoredLayout() then
         if el.widget:getChildIndex() == 1 or el.attributes and el.attributes.anchor == 'parent' then
             el.widget:addAnchor(AnchorLeft, 'parent', AnchorLeft)
@@ -59,7 +61,7 @@ local function processDisplayStyle(el)
     end
 end
 
-local function processFloatStyle(el)
+local function parseAndSetFloatStyle(el)
     if not el.style or not el.style.float or not el.widget:hasAnchoredLayout() then
         return
     end
@@ -93,6 +95,4 @@ local function processFloatStyle(el)
     end
 end
 
-
-
-return parseStyleElement, processDisplayStyle, processFloatStyle
+return parseCss, parseAndSetDisplayAttr, parseAndSetFloatStyle

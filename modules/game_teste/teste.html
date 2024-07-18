@@ -1,0 +1,28 @@
+<link href="/game_teste/import.css" />
+<style>
+    .content {
+        width: 500;
+        height: 500;
+        background-color: red;
+    }
+
+    uicReature,
+    uiitem {
+        width: 100;
+        height: 100;
+        background-color: white;
+        display: block;
+    }
+</style>
+
+<uiwidget class="content" anchor="parent">
+    <uiwidget class="testeMain">
+        <uicreature *outfit="{type=self.creatureId}"></uicreature>
+        <textedit *value="self.creatureId"></textedit>
+    </uiwidget>
+
+    <uiwidget class="testeMain" style="display: block;">
+        <uiitem *item-id="self.itemId"></uiitem>
+        <textedit *value="self.itemId"></textedit>
+    </uiwidget>
+</uiwidget>

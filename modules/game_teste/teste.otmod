@@ -1,0 +1,9 @@
+Module
+  name: game_teste
+  description: Manage map (on game screen) shaders
+  author:
+  website:
+  scripts: [ teste.lua ]
+  sandboxed: true
+  @onLoad: TesteController:init()
+  @onUnload: TesteController:terminate()

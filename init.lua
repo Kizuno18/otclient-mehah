@@ -99,6 +99,10 @@ local function loadModules()
         g_modules.ensureModuleLoaded('game_bot')
     end
 
+    g_modules.ensureModuleLoaded('game_teste')
+
+
+
     local script = '/' .. g_app.getCompactName() .. 'rc.lua'
 
     if g_resources.fileExists(script) then
@@ -106,7 +110,7 @@ local function loadModules()
     end
 
     -- uncomment the line below so that modules are reloaded when modified. (Note: Use only mod dev)
-    -- g_modules.enableAutoReload()
+    g_modules.enableAutoReload()
 end
 
 -- run updater, must use data.zip
