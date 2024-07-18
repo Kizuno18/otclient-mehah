@@ -30,6 +30,8 @@ label {
 
 textarea {
     white-space: pre;
+    width: 128;
+    height: 128;
 }
 
 h1,

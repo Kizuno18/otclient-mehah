@@ -168,7 +168,7 @@ local function setText(el, text)
     end
 end
 
-local generateRadioGroup = function(el, groups, controller)
+local createRadioGroup = function(el, groups, controller)
     local name = el.attributes.name
     if not name then
         return
@@ -181,4 +181,17 @@ local generateRadioGroup = function(el, groups, controller)
     groups[name]:addWidget(el.widget)
 end
 
-return parseEvents, onCreateWidget, setText, generateRadioGroup
+local function afterLoadElement(el)
+    if el.name == 'hr' then
+        if el.widget:hasAnchoredLayout() then
+            el.widget:addAnchor(AnchorLeft, 'parent', AnchorLeft)
+            el.widget:addAnchor(AnchorRight, 'parent', AnchorRight)
+        end
+    end
+
+    if #el.nodes == 0 then
+        setText(el, el:getcontent())
+    end
+end
+
+return parseEvents, onCreateWidget, setText, createRadioGroup, afterLoadElement

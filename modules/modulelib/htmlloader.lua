@@ -2,7 +2,7 @@ local OFICIAL_HTML_CSS = {}
 
 local parseCss, parseAndSetDisplayAttr, parseAndSetFloatStyle = dofile('ext/style')
 local parseStyle, parseLayout, parseExpression = dofile('ext/parse')
-local parseEvents, onCreateWidget, setText, generateRadioGroup = dofile('ext/parseevent')
+local parseEvents, onCreateWidget, setText, createRadioGroup, afterLoadElement = dofile('ext/parseevent')
 local translateStyleName, translateAttribute = dofile('ext/translator')
 
 local function readNode(el, parent, controller, watchList)
@@ -101,18 +101,7 @@ local function readNode(el, parent, controller, watchList)
     return widget
 end
 
-local function onProcessCSS(el)
-    if el.name == 'hr' then
-        if el.widget:hasAnchoredLayout() then
-            el.widget:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-            el.widget:addAnchor(AnchorRight, 'parent', AnchorRight)
-        end
-    end
 
-    if #el.nodes == 0 then
-        setText(el, el:getcontent())
-    end
-end
 
 parseCss(io.content('modulelib/html.css'), OFICIAL_HTML_CSS, false)
 
@@ -169,11 +158,12 @@ function HtmlLoader(path, parent, controller)
         if el.widget then
             parseAndSetDisplayAttr(el)
             parseAndSetFloatStyle(el)
-            onProcessCSS(el)
 
             if el.name == 'input' and el.attributes.type == 'radio' then
-                generateRadioGroup(el, radioGroups, controller)
+                createRadioGroup(el, radioGroups, controller)
             end
+
+            afterLoadElement(el)
         end
     end
 
