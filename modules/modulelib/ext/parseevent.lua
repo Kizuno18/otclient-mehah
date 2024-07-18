@@ -151,6 +151,23 @@ local onCreateWidget = function(el, widget, controller)
     end
 end
 
+local function setText(el, text)
+    if text then
+        local whiteSpace = el.style and el.style['white-space'] or 'nowrap'
+        el.widget:setTextWrap(true)
+        if whiteSpace == 'normal' then
+            text = text:trim()
+        elseif whiteSpace == 'nowrap' then
+            text = text:gsub("  ", ""):gsub("[\n\r\t]", " ")
+            el.widget:setTextWrap(false)
+        elseif whiteSpace == 'pre' then
+            el.widget:setTextWrap(false)
+        end
+
+        el.widget:setText(text)
+    end
+end
+
 local generateRadioGroup = function(el, groups, controller)
     local name = el.attributes.name
     if not name then
@@ -164,4 +181,4 @@ local generateRadioGroup = function(el, groups, controller)
     groups[name]:addWidget(el.widget)
 end
 
-return parseEvents, onCreateWidget, generateRadioGroup
+return parseEvents, onCreateWidget, setText, generateRadioGroup

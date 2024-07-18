@@ -2,7 +2,7 @@ local OFICIAL_HTML_CSS = {}
 
 local parseCss, parseAndSetDisplayAttr, parseAndSetFloatStyle = dofile('ext/style')
 local parseStyle, parseLayout, parseExpression = dofile('ext/parse')
-local parseEvents, onCreateWidget, generateRadioGroup = dofile('ext/parseevent')
+local parseEvents, onCreateWidget, setText, generateRadioGroup = dofile('ext/parseevent')
 local translateStyleName, translateAttribute = dofile('ext/translator')
 
 local function readNode(el, parent, controller, watchList)
@@ -66,7 +66,13 @@ local function readNode(el, parent, controller, watchList)
 
             v = tonumber(v) or toboolean(v) or v
 
-            local method = widget['set' .. methodName]
+            local method = nil
+            if methodName == 'Text' then
+                method = function(widget, v) setText(el, v) end
+            else
+                method = widget['set' .. methodName]
+            end
+
             if method then
                 method(widget, v)
 
@@ -104,19 +110,7 @@ local function onProcessCSS(el)
     end
 
     if #el.nodes == 0 then
-        local text = el:getcontent()
-        if text then
-            local whiteSpace = el.style and el.style['white-space'] or 'nowrap'
-            if whiteSpace == 'normal' then
-                text = text:trim()
-            elseif whiteSpace == 'nowrap' then
-                text = text:gsub("[\n\r\t]", ""):gsub("  ", "")
-            elseif whiteSpace == 'pre' then
-                -- nothing
-            end
-
-            el.widget:setText(text)
-        end
+        setText(el, el:getcontent())
     end
 end
 

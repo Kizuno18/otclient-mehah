@@ -28,6 +28,10 @@ label {
     text-auto-resize: true
 }
 
+textarea {
+    white-space: pre;
+}
+
 h1,
 h2,
 h3,
