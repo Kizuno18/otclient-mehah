@@ -195,29 +195,38 @@ local function afterLoadElement(el)
         local marginRect = el.widget:getMarginRect()
         local width = marginRect.width
         local height = marginRect.height
+        local fixWidthBlock = 0
 
         local newWidth = 0
         local newHeight = 0
 
-        local lastIsBlock = false
-        if width == 0 or not height == 0 then
-            for _, node in pairs(el.nodes) do
-                local nodeMarginRect = node.widget:getMarginRect()
+        local widths = {}
 
-                if lastIsBlock then
-                    newWidth = math.max(newWidth, nodeMarginRect.width)
-                    newHeight = math.max(newHeight, nodeMarginRect.height)
-                else
-                    newWidth = newWidth + nodeMarginRect.width
-                    newHeight = newHeight + nodeMarginRect.height
+        if width == 0 or height == 0 then
+            local sizeNode = #el.nodes
+            for i = 1, sizeNode do
+                local node = el.nodes[i]
+
+                local nodeMarginRect = node.widget:getMarginRect()
+                if i > 1 then
+                    nodeMarginRect.width = nodeMarginRect.width - node.widget:getMarginRight()
+                    nodeMarginRect.height = nodeMarginRect.height - node.widget:getMarginBottom()
                 end
-                lastIsBlock = el.styles and el.styles.display == 'block' or false
+
+                if node.prev and node.prev.style and node.prev.style.display == 'block' then
+                    table.insert(widths, newWidth)
+                    newWidth = nodeMarginRect.width + node.widget:getMarginRight()
+                    newHeight = newHeight + nodeMarginRect.height
+                else
+                    newWidth = newWidth + nodeMarginRect.width - fixWidthBlock
+                    newHeight = math.max(newHeight, nodeMarginRect.height)
+                end
             end
         end
 
-        print(newWidth, newHeight)
         if width == 0 then
-            el.widget:setWidth(newWidth)
+            table.dump(widths)
+            el.widget:setWidth(math.max(newWidth, unpack(widths)))
         end
 
         if height == 0 then

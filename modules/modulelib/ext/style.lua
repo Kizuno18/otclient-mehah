@@ -44,7 +44,7 @@ local function parseAndSetDisplayAttr(el)
             el.widget:addAnchor(AnchorLeft, 'parent', AnchorLeft)
             el.widget:addAnchor(AnchorTop, 'parent', AnchorTop)
         elseif el.prev and el.prev.style and el.prev.style.display == 'block' then
-            el.widget:addAnchor(AnchorLeft, 'prev', AnchorLeft)
+            el.widget:addAnchor(AnchorLeft, 'parent', AnchorLeft)
             el.widget:addAnchor(AnchorTop, 'prev', AnchorBottom)
         else -- if el.prev.style.display == 'inline' then
             el.widget:addAnchor(AnchorLeft, 'prev', AnchorRight)
