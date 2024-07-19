@@ -192,9 +192,8 @@ local function afterLoadElement(el)
     if #el.nodes == 0 then
         setText(el, el:getcontent())
     else
-        local marginRect = el.widget:getMarginRect()
-        local width = marginRect.width
-        local height = marginRect.height
+        local width = el.widget:getWidth()
+        local height = el.widget:getHeight()
         local fixWidthBlock = 0
 
         local newWidth = 0
@@ -204,6 +203,7 @@ local function afterLoadElement(el)
 
         if width == 0 or height == 0 then
             local sizeNode = #el.nodes
+            print(sizeNode)
             for i = 1, sizeNode do
                 local node = el.nodes[i]
 
@@ -225,7 +225,6 @@ local function afterLoadElement(el)
         end
 
         if width == 0 then
-            table.dump(widths)
             el.widget:setWidth(math.max(newWidth, unpack(widths)))
         end
 
