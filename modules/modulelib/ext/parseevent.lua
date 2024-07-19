@@ -203,7 +203,6 @@ local function afterLoadElement(el)
 
         if width == 0 or height == 0 then
             local sizeNode = #el.nodes
-            print(sizeNode)
             for i = 1, sizeNode do
                 local node = el.nodes[i]
 
